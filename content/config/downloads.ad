@@ -1,0 +1,16 @@
+title=Geronimo Config Downloads
+date=2017-09-19
+type=page
+status=published
+~~~~~~
+
+= Geronimo Config 1.0 Download Information
+|===
+|Source Download |ASC |SHA1 |MD5
+
+|link:http://www.apache.org/dyn/closer.cgi/geronimo/config/geronimo-config-1.0-source-release.zip[geronimo-config-1.0-source-release]
+|link:http://www.apache.org/dist/geronimo/config/geronimo-config-1.0-source-release.zip.asc[ASC]
+|link:http://www.apache.org/dist/geronimo/config/geronimo-config-1.0-source-release.zip.sha1[SHA1]
+|link:http://www.apache.org/dist/geronimo/config/geronimo-config-1.0-source-release.zip.md5[MD5]
+|===
+
