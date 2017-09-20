@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Geronimo Config User Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/asciidoctor.css" rel="stylesheet">
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
+    <link rel="shortcut icon" href="../favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+    <div id="wrap">
+
+	<!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://geronimo.apache.org/new-site/">Apache Geronimo</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="http://geronimo.apache.org/new-site/index.html">Home</a></li>
+            <li><a href="http://geronimo.apache.org/new-site/about.html">About</a></li>
+            <li><a href="http://geronimo.apache.org/new-site/contact.html">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                  <li><a href="http://geronimo.apache.org/new-site/config">Config</a></li>
+                  <li><a href="http://geronimo.apache.org/new-site/safeguard">Safeguard</a></li>
+                  <li><a href="http://geronimo.apache.org/new-site/specs">Specs</a></li>
+                  <li><a href="http://geronimo.apache.org/new-site/xbean">XBean</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container">	
+	<div class="page-header">
+		<h1>Geronimo Config User Guide</h1>
+	</div>
+
+	<p><em>19 September 2017</em></p>
+
+	<p><div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>To get started with Geronimo Config, you&#8217;ll want to add the dependencies to the project.  Eclipse MicroProfile Config is a transitive dependency, it will come in automatically as a dependency.</p>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re using Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.geronimo.config&lt;/groupId&gt;
+    &lt;artifactId&gt;geronimo-config-impl&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re using Gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>dependencies {
+     compile 'org.apache.geronimo.config:geronimo-config-impl:1.0'
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_general_use_cases">General Use Cases</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_registering_config_sources">Registering Config Sources</h3>
+<div class="paragraph">
+<p><code>ConfigSource</code> implementations can be registered via <code>ServiceLoader</code>.  Declare a <code>ServiceLoader</code> of type <code>ConfigSource</code> or <code>ConfigSourceProvider</code> to <a href="https://github.com/eclipse/microprofile-config/blob/1.1/spec/src/main/asciidoc/configsources.asciidoc#custom-configsources">register these classes</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_default_config_sources">Default Config Sources</h3>
+<div class="paragraph">
+<p>By default, we register a <code>ConfigSource</code> for System Properties as well as Environment Variables.</p>
+</div>
+<div class="paragraph">
+<p>Environment Variables are attempted using both <code>.</code> as well as <code>_</code>, meaning a property lookup for <code>my.config.property</code> will search both <code>my.config.property</code> as well as <code>my_config_property</code>, to conform to naming convention standards for environment variables.</p>
+</div>
+<div class="paragraph">
+<p>System Properties are loaded on start up, copying the values into the config source instance.  You can change this behavior by:
+- disabling default config source loading, and manually registering a <code>SystemPropertyConfigSource</code> passing in <code>false</code> in the constructor
+- Set the system property <code>org.apache.geronimo.config.configsource.SystemPropertyConfigSource.copy</code> to <code>false</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cdi_use_cases">CDI Use Cases</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Being an implementation of a MicroProfile specification, it favors use cases based on CDI.  Most of the heavy lifting is done for you when using CDI.</p>
+</div>
+<div class="sect2">
+<h3 id="_injecting_config">Injecting Config</h3>
+<div class="paragraph">
+<p>The MicroProfile <code>Config</code> interface is supported as an injection point.  It is an <code>@ApplicationScoped</code> bean, loaded from the result of <code>ConfigProvider.getConfig()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>@Inject
+private Config config</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Will allow you to use the default <code>Config</code> object for your application.  All of the operations of <code>Config</code> match the MicroProfile Specification.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_injecting_config_properties">Injecting Config Properties</h3>
+<div class="paragraph">
+<p>Injecting <code>@ConfigProperty</code> <a href="https://github.com/eclipse/microprofile-config/blob/1.1/spec/src/main/asciidoc/configexamples.asciidoc#simple-dependency-injection-example">works based on the specification</a>.</p>
+</div>
+<div class="paragraph">
+<p>In addition to the defined supported types, Geronimo Config supports injecting <code>Supplier&lt;T&gt;</code> where <code>T</code> is any type that has a supported <code>Converter</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_non_cdi_use_cases">Non-CDI Use Cases</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You may not be using CDI, or do not want to use the built in CDI integration.  You can then using the programmatic look up for the configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Config config = ConfigProviderResolver.instance().getBuilder()
+    .addDefaultSources() // built in config sources (system properties, environment variables and microprofile-config.properties
+    .addDiscoveredConverters() // converters discovered via ServiceLoader
+    .addDiscoveredSources() // sources discovered via ServiceLoader
+    .withConverters() // list of converter instances, cannot be lambda expressions
+    .withSources() // list of config source instances
+    .forClassLoader() // the classloader associated with this config
+    .build()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will register and build a <code>Config</code> object for use.  You will need to keep track of that created instance.  If you want it to be managed automatically, you can then register it</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">ConfigProviderResolver.instance().registerConfig(config, classLoader);</code></pre>
+</div>
+</div>
+</div>
+</div></p>
+
+	<hr />
+
+		</div>
+		<div id="push"></div>
+    </div>
+    
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.5.1</a></p>
+      </div>
+    </div>
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../js/jquery-1.11.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/prettify.js"></script>
+    
+  </body>
+</html>
