@@ -1,7 +1,0 @@
-title=XBean
-date=2017-09-05
-type=page
-status=published
-~~~~~~
-
-The goal of XBean project is to created a plugin based server analogous to Eclipse being a plugin based IDE. XBean will be able to discover, download and install server plugins from an Internet based repository. In addition, we include support for multiple IoC systems, support for running with no IoC system, JMX without JMX code, lifecycle and class loader management, and a rock solid Spring integration.
